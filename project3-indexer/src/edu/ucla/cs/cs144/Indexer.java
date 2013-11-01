@@ -61,6 +61,21 @@ public class Indexer {
 	}
     }
 
+    public void indexUsers(Users user)
+    {
+        IndexWriter writer = getIndexWriter(false);
+        Document doc = new Document();
+        doc.add(new Field("userID", user.getID(), Field.Store.NO, Field.Index.YES));
+        doc.add(new Field("rating", user.getRating(), Field.Store.NO, Field.Index.YES));
+        doc.add(new Field("location", user.getLocation(), Field.Store.NO, Field.Index.YES));
+        doc.add(new Field("country", user.getCountry(), Field.Store.NO Field.Index.Yes));
+        writer.addDocument(doc);
+    }
+    public void indexUser(User element)
+    {
+        
+    }
+    
     public static void main(String args[]) {
         Indexer idx = new Indexer();
         idx.rebuildIndexes();
