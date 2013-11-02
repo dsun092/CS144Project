@@ -1,6 +1,11 @@
 package edu.ucla.cs.cs144;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.io.IOException;
 
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Document;
@@ -13,8 +18,21 @@ public class Indexer {
     /** Creates a new instance of Indexer */
     public Indexer() {
     }
- 
-    public void rebuildIndexes() {
+    private IndexWriter indexWriter = null;
+    public IndexWriter getIndexWriter(boolean create) throws IOException {
+        if (indexWriter == null) {
+            indexWriter = new IndexWriter(System.getenv("LUCENE_INDEX") + "/index",
+                                          new StandardAnalyzer(),
+                                          create);
+        }
+        return indexWriter;
+    }
+    public void closeIndexWriter() throws IOException {
+        if (indexWriter != null) {
+            indexWriter.close();
+        }
+    }
+    public void rebuildIndexes() throws IOException{
 
         Connection conn = null;
 
@@ -44,23 +62,32 @@ public class Indexer {
          * and place your class source files at src/edu/ucla/cs/cs144/.
 	 * 
 	 */
-        Statement stmt = conn.createStatement();
-        int itemID;
-        String name, description, sellerID;
-        Timestamp started;
-        Timestamp ends;
-        BigDecimal buyPrice;
-        
-        ResultSet rs = stmt.executeQuery("SELECT * FROM Item");
-        while(rs.next())
+        Statement stmt = null;
+        try{
+            stmt = conn.createStatement();
+        } catch (SQLException ex)
         {
-            itemID = rs.getInt("itemID");
-            name = rs.getString("name");
-            description = rs.getString("description");
-            Items item = new Items(itemID, name, description);
-            indexItem(item);
+            System.out.println(ex);
         }
         
+        String itemID;
+        String name, description;
+    
+        try{
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Item");
+            while(rs.next())
+            {
+                itemID = Integer.toString(rs.getInt("itemID"));
+                name = rs.getString("name");
+                description = rs.getString("description");
+                Items item = new Items(itemID, name, description);
+                indexItem(item);
+            }
+        } catch (SQLException ex)
+        {
+            System.out.println(ex);
+        }
+    
         
         closeIndexWriter();
 
@@ -73,18 +100,23 @@ public class Indexer {
 	}
     }
     
-    public void indexItem(Items item)
+    public void indexItem(Items item)throws IOException
     {
         IndexWriter writer = getIndexWriter(false);
         Document doc = new Document();
-        doc.add(new Field("itemID", item.getID(), Field.Store.YES, Field.Index.UN_TOKENIZED));
+        doc.add(new Field("itemID", item.getID(), Field.Store.YES, Field.Index.NO));
         doc.add(new Field("name", item.getName(), Field.Store.YES, Field.Index.TOKENIZED));
         doc.add(new Field("description", item.getDescription(), Field.Store.NO, Field.Index.TOKENIZED));
         writer.addDocument(doc);
     }
     
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException{
         Indexer idx = new Indexer();
+        try{
         idx.rebuildIndexes();
-    }   
+        } catch (IOException io)
+        {
+            System.out.println(io);
+        }
+    }
 }

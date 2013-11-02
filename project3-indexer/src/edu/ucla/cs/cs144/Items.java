@@ -11,7 +11,7 @@ public class Items{
     public Items(){
     }
     
-    public Items(String itemID, String name, String description, String start, String end, String sellerID, String buy_price)
+    public Items(String itemID, String name, String description)
     {
         this.itemID = itemID;
         this.name = name;
