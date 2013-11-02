@@ -1,10 +1,6 @@
 package edu.ucla.cs.cs144;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Document;
@@ -28,7 +24,7 @@ public class Indexer {
 	} catch (SQLException ex) {
 	    System.out.println(ex);
 	}
-
+        getIndexWriter(true);
 
 	/*
 	 * Add your code here to retrieve Items using the connection
@@ -48,9 +44,25 @@ public class Indexer {
          * and place your class source files at src/edu/ucla/cs/cs144/.
 	 * 
 	 */
-        //THIS IS TO TEST GITHUB
+        Statement stmt = conn.createStatement();
+        int itemID;
+        String name, description, sellerID;
+        Timestamp started;
+        Timestamp ends;
+        BigDecimal buyPrice;
+        
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Item");
+        while(rs.next())
+        {
+            itemID = rs.getInt("itemID");
+            name = rs.getString("name");
+            description = rs.getString("description");
+            Items item = new Items(itemID, name, description);
+            indexItem(item);
+        }
         
         
+        closeIndexWriter();
 
 
         // close the database connection
@@ -60,20 +72,15 @@ public class Indexer {
 	    System.out.println(ex);
 	}
     }
-
-    public void indexUsers(Users user)
+    
+    public void indexItem(Items item)
     {
         IndexWriter writer = getIndexWriter(false);
         Document doc = new Document();
-        doc.add(new Field("userID", user.getID(), Field.Store.NO, Field.Index.YES));
-        doc.add(new Field("rating", user.getRating(), Field.Store.NO, Field.Index.YES));
-        doc.add(new Field("location", user.getLocation(), Field.Store.NO, Field.Index.YES));
-        doc.add(new Field("country", user.getCountry(), Field.Store.NO Field.Index.Yes));
+        doc.add(new Field("itemID", item.getID(), Field.Store.YES, Field.Index.UN_TOKENIZED));
+        doc.add(new Field("name", item.getName(), Field.Store.YES, Field.Index.TOKENIZED));
+        doc.add(new Field("description", item.getDescription(), Field.Store.NO, Field.Index.TOKENIZED));
         writer.addDocument(doc);
-    }
-    public void indexUser(User element)
-    {
-        
     }
     
     public static void main(String args[]) {
