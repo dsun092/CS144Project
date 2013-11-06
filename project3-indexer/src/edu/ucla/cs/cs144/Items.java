@@ -11,11 +11,12 @@ public class Items{
     public Items(){
     }
     
-    public Items(String itemID, String name, String description)
+    public Items(String itemID, String name, String description, String category)
     {
         this.itemID = itemID;
         this.name = name;
         this.description = description;
+        this.category = category;
         //this.start = start;
         //this.end = end;
         //this.sellerID = sellerID;
@@ -30,6 +31,9 @@ public class Items{
     }
     public String getDescription(){
         return this.description;
+    }
+    public String getCategory(){
+        return this.category;
     }
    /*
     public String getStart(){
@@ -51,6 +55,7 @@ public class Items{
     private String itemID;
     private String name;
     private String description;
+    private String category;
     //private String start;
     //private String end;
     //private String sellerID;

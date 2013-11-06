@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.IOException;
+import java.lang.*;
 
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Document;
@@ -72,15 +73,31 @@ public class Indexer {
         
         String itemID;
         String name, description;
+        StringBuilder categories = new StringBuilder();
+        
     
         try{
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Item");
+            ResultSet rs = stmt.executeQuery("SELECT i.itemID, i.name, i.description, c.category FROM Item i, Category c WHERE i.itemID = c.itemID");
             while(rs.next())
             {
                 itemID = Integer.toString(rs.getInt("itemID"));
                 name = rs.getString("name");
                 description = rs.getString("description");
-                Items item = new Items(itemID, name, description);
+                categories.append(rs.getString("category"));
+                while(rs.next());
+                      {
+                          if(itemID == Integer.toString(rs.getInt("itemID")))
+                          {
+                              categories.append(" " + rs.getString("category"));
+                          }
+                          else
+                          {
+                              rs.previous();
+                              break;
+                          }
+                      }
+                String finalCategory = categories.toString();
+                Items item = new Items(itemID, name, description, finalCategory);
                 indexItem(item);
             }
         } catch (SQLException ex)
@@ -107,6 +124,7 @@ public class Indexer {
         doc.add(new Field("itemID", item.getID(), Field.Store.YES, Field.Index.NO));
         doc.add(new Field("name", item.getName(), Field.Store.YES, Field.Index.TOKENIZED));
         doc.add(new Field("description", item.getDescription(), Field.Store.NO, Field.Index.TOKENIZED));
+        doc.add(new Field("category", item.getCategory(), Field.Store.NO, Field.Index.TOKENIZED));
         writer.addDocument(doc);
     }
     
