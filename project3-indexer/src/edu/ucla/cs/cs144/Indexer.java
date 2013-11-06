@@ -64,39 +64,39 @@ public class Indexer {
 	 * 
 	 */
         Statement stmt = null;
+        Statement stmt1 = null;
         try{
             stmt = conn.createStatement();
+            stmt1 = conn.createStatement();
         } catch (SQLException ex)
         {
             System.out.println(ex);
         }
         
         String itemID;
-        String name, description;
-        StringBuilder categories = new StringBuilder();
-        
+        String name, description;        
     
         try{
-            ResultSet rs = stmt.executeQuery("SELECT i.itemID, i.name, i.description, c.category FROM Item i, Category c WHERE i.itemID = c.itemID");
+            ResultSet rs = stmt.executeQuery("SELECT i.itemID, i.name, i.description FROM Item i");
+            String query = "SELECT * FROM Category c";
+            
+            ResultSet cat = stmt1.executeQuery(query);
+            cat.next();
+            
             while(rs.next())
             {
+                StringBuilder categories = new StringBuilder();
                 itemID = Integer.toString(rs.getInt("itemID"));
                 name = rs.getString("name");
                 description = rs.getString("description");
-                categories.append(rs.getString("category"));
-                while(rs.next());
-                      {
-                          if(itemID == Integer.toString(rs.getInt("itemID")))
-                          {
-                              categories.append(" " + rs.getString("category"));
-                          }
-                          else
-                          {
-                              rs.previous();
-                              break;
-                          }
-                      }
+                categories.append(cat.getString("category"));
+                while(itemID.equals(Integer.toString(cat.getInt("itemID"))) && cat.next())
+                {
+                    categories.append(" " + cat.getString("category"));
+                }
+                
                 String finalCategory = categories.toString();
+
                 Items item = new Items(itemID, name, description, finalCategory);
                 indexItem(item);
             }
@@ -104,7 +104,6 @@ public class Indexer {
         {
             System.out.println(ex);
         }
-    
         
         closeIndexWriter();
 
