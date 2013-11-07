@@ -2,6 +2,8 @@ package edu.ucla.cs.cs144;
 
 import edu.ucla.cs.cs144.SearchConstraint;
 import edu.ucla.cs.cs144.SearchResult;
+import java.io.IOException;
+
 
 public interface IAuctionSearch {
 	
@@ -17,7 +19,7 @@ public interface IAuctionSearch {
 	 * SearchResult objects.
 	 */
 	public SearchResult[] basicSearch(String query, int numResultsToSkip, 
-			int numResultsToReturn);
+			int numResultsToReturn) throws IOException;
 	
 	/**
 	 * Performs a search over the AND of all of the SearchConstraints. 

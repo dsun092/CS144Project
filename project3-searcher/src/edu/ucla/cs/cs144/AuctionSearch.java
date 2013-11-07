@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.io.IOException;
+import java.lang.*;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -43,11 +45,60 @@ public class AuctionSearch implements IAuctionSearch {
          * placed at src/edu/ucla/cs/cs144.
          *
          */
-	
+    private QueryParser parser = null;
+    private IndexSearcher searcher = null;
+    public AuctionSearch() throws IOException{
+        searcher = new IndexSearcher(System.getenv("LUCENE_INDEX") + "/index");
+        parser = new QueryParser("category", new StandardAnalyzer());
+    }
+    
+    public Hits performSearch(String queryString)
+    throws IOException, ParseException {
+        Query query = parser.parse(queryString);
+        Hits hits = searcher.search(query);
+        return hits;
+    }
+    
 	public SearchResult[] basicSearch(String query, int numResultsToSkip, 
-			int numResultsToReturn) {
-		// TODO: Your code here!
-		return new SearchResult[0];
+			int numResultsToReturn) throws IOException{
+        
+        Hits hits = null;
+        try{
+            hits = performSearch(query);
+            System.out.println(hits.length());
+        } catch (ParseException pe)
+        {
+            System.out.println(pe);
+        }
+        
+        SearchResult[] rs = null;
+        
+        if(numResultsToReturn > 0 && numResultsToReturn > hits.length())
+        {
+            rs = new SearchResult[numResultsToReturn];
+        }
+        else
+        {
+            rs = new SearchResult[hits.length()];
+        }
+        
+        if(numResultsToSkip > hits.length())
+        {
+            return new SearchResult[0];
+        }
+        int i = numResultsToSkip;
+        int j = 0;
+        while(i < hits.length())
+        {
+            Document doc = hits.doc(i);
+            String id = doc.get("itemID");
+            String name = doc.get("name");
+            System.out.println(id + " " + name);
+            rs[j] = new SearchResult(id, name);
+            j++;
+            i++;
+        }
+		return rs;
 	}
 
 	public SearchResult[] advancedSearch(SearchConstraint[] constraints, 
