@@ -49,7 +49,7 @@ public class AuctionSearch implements IAuctionSearch {
     private IndexSearcher searcher = null;
     public AuctionSearch() throws IOException{
         searcher = new IndexSearcher(System.getenv("LUCENE_INDEX") + "/index");
-        parser = new QueryParser("category", new StandardAnalyzer());
+        parser = new QueryParser("description", new StandardAnalyzer());
     }
     
     public Hits performSearch(String queryString)
@@ -63,8 +63,9 @@ public class AuctionSearch implements IAuctionSearch {
 			int numResultsToReturn) throws IOException{
         
         Hits hits = null;
+        String newQuery = "name:" + query + " OR description:" + query + " OR category:" + query;
         try{
-            hits = performSearch(query);
+            hits = performSearch(newQuery);
             System.out.println(hits.length());
         } catch (ParseException pe)
         {
@@ -72,38 +73,51 @@ public class AuctionSearch implements IAuctionSearch {
         }
         
         SearchResult[] rs = null;
-        
-        if(numResultsToReturn > 0 && numResultsToReturn > hits.length())
-        {
-            rs = new SearchResult[numResultsToReturn];
-        }
-        else
-        {
-            rs = new SearchResult[hits.length()];
-        }
-        
         if(numResultsToSkip > hits.length())
         {
             return new SearchResult[0];
         }
-        int i = numResultsToSkip;
-        int j = 0;
-        while(i < hits.length())
+        
+        if(numResultsToReturn > 0 && numResultsToReturn < hits.length())
         {
-            Document doc = hits.doc(i);
-            String id = doc.get("itemID");
-            String name = doc.get("name");
-            System.out.println(id + " " + name);
-            rs[j] = new SearchResult(id, name);
-            j++;
-            i++;
+            rs = new SearchResult[numResultsToReturn];
+            int i = numResultsToSkip;
+            int j = 0;
+            while(i < hits.length() && j < numResultsToReturn)
+            {
+                //System.out.println(i + " " + j + " " + numResultsToReturn);
+                Document doc = hits.doc(i);
+                String id = doc.get("itemID");
+                String name = doc.get("name");
+                //System.out.println(id + " " + name);
+
+                rs[j] = new SearchResult(id, name);
+                j++;
+                i++;
+            }
+        }
+        else
+        {
+            rs = new SearchResult[hits.length()];
+            int i = numResultsToSkip;
+            int j = 0;
+            while(i < hits.length())
+            {
+                Document doc = hits.doc(i);
+                String id = doc.get("itemID");
+                String name = doc.get("name");
+                //System.out.println(id + " " + name);
+                rs[j] = new SearchResult(id, name);
+                j++;
+                i++;
+            }
         }
 		return rs;
 	}
 
 	public SearchResult[] advancedSearch(SearchConstraint[] constraints, 
 			int numResultsToSkip, int numResultsToReturn) {
-		// TODO: Your code here!
+		
 		return new SearchResult[0];
 	}
 

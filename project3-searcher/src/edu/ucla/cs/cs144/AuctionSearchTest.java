@@ -19,16 +19,16 @@ public class AuctionSearchTest {
 		String reply = as.echo(message);
 		System.out.println("Reply: " + reply);
 		
-		String query = "superman";
+		String query = "star trek";
 		SearchResult[] basicResults = as.basicSearch(query, 0, 0);
 		System.out.println("Basic Seacrh Query: " + query);
 		System.out.println("Received " + basicResults.length + " results");
         int i = 0;
-		/*for(SearchResult result : basicResults) {
+		for(SearchResult result : basicResults) {
 			System.out.println(result.getItemId() + ": " + result.getName());
             System.out.println(i);
             i++;
-		}*/
+		}
 		/*
 		SearchConstraint constraint =
 		    new SearchConstraint(FieldName.BuyPrice, "5.99"); 
