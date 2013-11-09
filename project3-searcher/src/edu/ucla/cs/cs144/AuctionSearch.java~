@@ -112,24 +112,6 @@ public class AuctionSearch implements IAuctionSearch {
 	}
     
 	
-	public String escape(String s) {
-		String newString = "";
-		for (int i = 0; i < s.length(); i++) {
-			if (s.charAt(i) == '\"')
-				newString = newString + "&quot;";
-			else if (s.charAt(i) == '\'')
-				newString = newString + "&apos;";
-			else if (s.charAt(i) == '&')
-				newString = newString + "&amp;";
-			else if (s.charAt(i) == '<')
-				newString = newString + "&lt;";
-			else if (s.charAt(i) == '>')
-				newString = newString + "&gt;";
-			else
-				newString = newString + s.charAt(i);
-		}
-		return newString;
-	}
 	public String getXMLDataForItemId(String itemId) {
 		// Item table
 		String itemName = "";
@@ -303,6 +285,24 @@ public class AuctionSearch implements IAuctionSearch {
     
     /**********************************************************/
     //helper functions
+	public String escape(String s) {
+		String newString = "";
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == '\"')
+				newString = newString + "&quot;";
+			else if (s.charAt(i) == '\'')
+				newString = newString + "&apos;";
+			else if (s.charAt(i) == '&')
+				newString = newString + "&amp;";
+			else if (s.charAt(i) == '<')
+				newString = newString + "&lt;";
+			else if (s.charAt(i) == '>')
+				newString = newString + "&gt;";
+			else
+				newString = newString + s.charAt(i);
+		}
+		return newString;
+	}
     public String constructQueryBasic(String query)
     {
         String newQuery = "name:" + query + " OR description:" + query + " OR category:" + query;
