@@ -18,15 +18,9 @@ public class AuctionSearchTest {
 		String message = "Test message";
 		String reply = as.echo(message);
 		System.out.println("Reply: " + reply);
-<<<<<<< HEAD
 		/*
 		String query = "superman";
 		SearchResult[] basicResults = as.basicSearch(query, 1, 2);
-=======
-		
-		String query = "star trek";
-		SearchResult[] basicResults = as.basicSearch(query, 0, 1);
->>>>>>> bc3b7a8634d58665b0896e4c229c33941e54daeb
 		System.out.println("Basic Seacrh Query: " + query);
 		System.out.println("Received " + basicResults.length + " results");
         int i = 0;
@@ -34,13 +28,8 @@ public class AuctionSearchTest {
 			System.out.println(result.getItemId() + ": " + result.getName());
             System.out.println(i);
             i++;
-<<<<<<< HEAD
 		}*/
 		
-=======
-		}
-		/*
->>>>>>> bc3b7a8634d58665b0896e4c229c33941e54daeb
 		SearchConstraint constraint =
 		    new SearchConstraint(FieldName.EndTime, "Dec-14-01 21:00:05");
         SearchConstraint constraint2 =
@@ -54,20 +43,12 @@ public class AuctionSearchTest {
 		for(SearchResult result : advancedResults) {
 			System.out.println(result.getItemId() + ": " + result.getName());
 		}
-<<<<<<< HEAD
 		/*
 		String itemId = "1497595357";
 		String item = as.getXMLDataForItemId(itemId);
 		System.out.println("XML data for ItemId: " + itemId);
 		System.out.println(item);
          */
-=======
-	*/	
-		String itemId = "1497497054";
-		String item = as.getXMLDataForItemId(itemId);
-		System.out.println("XML data for ItemId: " + itemId);
-		System.out.println(item);
->>>>>>> bc3b7a8634d58665b0896e4c229c33941e54daeb
 
 		// Add your own test here
 	}
