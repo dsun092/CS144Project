@@ -81,15 +81,15 @@ public class AuctionSearch implements IAuctionSearch {
         if(onlyText)
         {
             String query = constructQueryAdvanced(constraints);
-            System.out.println(query);
+            //System.out.println(query);
             SearchResult[] rs = Search(query, numResultsToSkip, numResultsToReturn);
             return rs;
         }
         else{
             String sqlQuery = constructSQLQuery(constraints);
             String luceneQuery = constructQueryAdvanced(constraints);
-            System.out.println(sqlQuery);
-            System.out.println(luceneQuery);
+            //System.out.println(sqlQuery);
+            //System.out.println(luceneQuery);
             SearchResult[] sqlRS = null;
             SearchResult[] luceneRS = null;
             boolean foundLucene = false;
@@ -420,7 +420,7 @@ public class AuctionSearch implements IAuctionSearch {
         Hits hits = null;
         try{
             hits = performSearch(query);
-            System.out.println("Size of searchArray:" + hits.length());
+            //System.out.println("Size of searchArray:" + hits.length());
         } catch (ParseException pe)
         {
             System.out.println(pe);
@@ -496,7 +496,7 @@ public class AuctionSearch implements IAuctionSearch {
         {
             System.out.println(ex);
         }
-        System.out.println("Size of sqlArray: " + results.size());
+        //System.out.println("Size of sqlArray: " + results.size());
         SearchResult[] finalResult = results.toArray(new SearchResult[results.size()]);
         return finalResult;
     }
@@ -516,7 +516,7 @@ public class AuctionSearch implements IAuctionSearch {
             for(SearchResult t : luceneArray)
             {
                 if(s.getItemId().equals(t.getItemId())){
-                    System.out.println("Match: " + s.getName() + " " + s.getItemId());
+                   // System.out.println("Match: " + s.getName() + " " + s.getItemId());
                     result.add(s);
                 }
             }
