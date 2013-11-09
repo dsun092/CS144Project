@@ -20,7 +20,7 @@ public class AuctionSearchTest {
 		System.out.println("Reply: " + reply);
 		
 		String query = "star trek";
-		SearchResult[] basicResults = as.basicSearch(query, 0, 0);
+		SearchResult[] basicResults = as.basicSearch(query, 0, 1);
 		System.out.println("Basic Seacrh Query: " + query);
 		System.out.println("Received " + basicResults.length + " results");
         int i = 0;
