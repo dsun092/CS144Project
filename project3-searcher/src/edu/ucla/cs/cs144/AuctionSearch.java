@@ -163,16 +163,14 @@ public class AuctionSearch implements IAuctionSearch {
 		String amount = "";
 
 		// Misc variables
-		String t = "  ";
-		String t2 = "    ";
-		String t3 = "      ";
-		String t4 = "        ";
-		String t5 = "          ";
+		String t = "";
+		String t2 = "  ";
+		String t3 = "    ";
+		String t4 = "      ";
+		String t5 = "        ";
 
 
-		String xmlResult = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
-				    "<!DOCTYPE Items SYSTEM \"items.dtd\">\n" +
-				    t + "<Item ItemID=" + itemId + ">";
+		String xmlResult = "<Item ItemID=" + itemId + ">";
 
 		/*
 		float currently, buyPrice, firstBid;
@@ -187,7 +185,7 @@ public class AuctionSearch implements IAuctionSearch {
 			Statement stmt = con.createStatement();
 
 			// Execute the SELECT statement to retrieve the item information
-			ResultSet rs = stmt.executeQuery("SELECT *, DATE_FORMAT(started, \"%b-%d-%m %H:%i:%s\") AS s, DATE_FORMAT(ends, \"%b-%d-%m %H:%i:%s\") AS e FROM Item WHERE itemID = "+itemId);
+			ResultSet rs = stmt.executeQuery("SELECT *, DATE_FORMAT(started, \"%b-%d-%y %H:%i:%s\") AS s, DATE_FORMAT(ends, \"%b-%d-%y %H:%i:%s\") AS e FROM Item WHERE itemID = "+itemId);
 
 			if (rs.next()) {
 				do {
@@ -232,7 +230,7 @@ public class AuctionSearch implements IAuctionSearch {
 					t2 + "<Number_of_Bids>" + numBids + "<Number_of_Bids>";
 
 				// #7 Bids on the item
-				rs = stmt.executeQuery("SELECT *, DATE_FORMAT(time, \"%b-%d-%m %H:%i:%s\") AS t FROM Bid WHERE itemID = " + itemId + " ORDER BY time");
+				rs = stmt.executeQuery("SELECT *, DATE_FORMAT(time, \"%b-%d-%y %H:%i:%s\") AS t FROM Bid WHERE itemID = " + itemId + " ORDER BY time");
 			
 				if (rs.next()) {	
 					xmlResult = xmlResult + "\n" + t2 + "<Bids>";
@@ -276,7 +274,7 @@ public class AuctionSearch implements IAuctionSearch {
 					t2 + "<Started>" + started + "</Started>\n" + 
 					t2 + "<Ends>" + ends + "</Ends>\n" +
 					t2 + "<Seller UserID=\"" + escape(sellerID) + "\" Rating=\"" + sellerrating + "\"/>\n" +
-					t2 + "<Description>" + escape(description) + "</Description>\n" + t + "</Item>";
+					t2 + "<Description>" + escape(description) + "</Description>\n</Item>";
 				}
 			else {
 				return "";
