@@ -6,3 +6,8 @@ A.3 successfully parsed through XML returned from getXMlFromItemID and outputted
 TODO: Need to pass the XML parsed information into a JSP page, the specs does not allow us to output html from servlet. Also need to figure out how to obtain necessary multiple attributed information such as Categories and Bids.
 
 A.4 Not done yet. Add simple navigational links. Should not take more than 20 minutes.
+
+PARTNERS:
+
+Zhongtai Sun: 903909635
+Kevin Chanyoung Kim: 
