@@ -1,29 +1,57 @@
 package edu.ucla.cs.cs144;
 
 public class ItemInfo {
-	private String itemId;
-	private String name;
+	private String UserID;
+	private String Rating;
+    private String Time;
+    private String Amount;
+    private String Location;
+    private String Country;
     
-	public ItemInfo() {}
-    
-	public ItemInfo(String xml) {
-		this.itemId = itemId;
-		this.name = name;
+	public ItemInfo() {
+
 	}
     
-	public String getItemId() {
-		return itemId;
+	public String getUserID() {
+		return UserID;
 	}
 	
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
+	public String getID() {
+		return UserID;
 	}
+    
+    public String getRating(){
+        return Rating;
+    }
+    public String getTime(){
+        return Time;
+    }
+    public String getAmount(){
+        return Amount;
+    }
+    public String getLocation(){
+        return Location;
+    }
+    public String getCountry(){
+        return Country;
+    }
 	
-	public String getName() {
-		return name;
+	public void setID(String UserID) {
+		this.UserID = UserID;
 	}
-	
-	public void setName(String name) {
-		this.name = name;
+    public void setRating(String Rating) {
+		this.Rating = Rating;
 	}
+    public void setTime(String time){
+        this.Time = time;
+    }
+    public void setAmount(String amount){
+        this.Amount = amount;
+    }
+    public void setLocation(String location){
+        this.Location = location;
+    }
+    public void setCountry(String country){
+        this.Country = country;
+    }
 }
